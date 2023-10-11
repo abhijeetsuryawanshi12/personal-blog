@@ -42,7 +42,6 @@ ALLOWED_HOSTS = list(os.environ.get("ALLOWED_HOSTS"))
 
 INSTALLED_APPS = [
     'blog',
-    'whitenoise.runserver_nostatic'
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
