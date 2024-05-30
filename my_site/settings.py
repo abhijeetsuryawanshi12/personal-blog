@@ -14,14 +14,15 @@ import dj_database_url
 from pathlib import Path
 from os import getenv
 import os
+from dotenv import load_dotenv
 import environ
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 print(BASE_DIR)
 
-#hi
-#this is added code start
+
 # env = environ.Env()
 # environ.Env.read_env()
 
@@ -29,16 +30,24 @@ print(BASE_DIR)
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-tnuh&5@xe7i4rdbbyxfa2vom^cr8ohy70e0$$#!f5b$b-q_05x'
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = 'django-insecure-tnuh&5@xe7i4rdbbyxfa2vom^cr8ohy70e0$$#!f5b$b-q_05x'
+
+# SECRET_KEY = os.environ.get("SECRET_KEY")
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG","False").lower() == "true"
-# DEBUG = True
+# DEBUG = False
+DEBUG = os.environ.get("DEBUG","False").lower() == "false"
 
-ALLOWED_HOSTS = list(os.environ.get("ALLOWED_HOSTS"))
+
+# ALLOWED_HOSTS = list(os.environ.get("ALLOWED_HOSTS"))
 # ALLOWED_HOSTS = []
 
+# Get the ALLOWED_HOSTS environment variable
+allowed_hosts_env = os.environ.get("ALLOWED_HOSTS", "")
+
+# Split the string by commas and assign to ALLOWED_HOSTS
+ALLOWED_HOSTS = allowed_hosts_env.split(",") if allowed_hosts_env else []
 
 # Application definition
 
@@ -89,15 +98,28 @@ WSGI_APPLICATION = 'my_site.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 database_url = os.environ.get("DATABASE_URL")
-DATABASES["default"] = dj_database_url.parse(database_url)
+
+if database_url:
+    # Parse database configuration from $DATABASE_URL
+    DATABASES = {
+        'default': dj_database_url.parse(database_url)
+    }
+else:
+    # Default to SQLite if DATABASE_URL is not set
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 
 # DATABASES = {
