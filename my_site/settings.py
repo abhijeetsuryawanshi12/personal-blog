@@ -48,6 +48,7 @@ allowed_hosts_env = os.environ.get("ALLOWED_HOSTS", "")
 
 # Split the string by commas and assign to ALLOWED_HOSTS
 ALLOWED_HOSTS = allowed_hosts_env.split(",") if allowed_hosts_env else []
+# ALLOWED_HOSTS = ['198.211.99.20', 'localhost', '127.0.0.1']
 
 # Application definition
 
